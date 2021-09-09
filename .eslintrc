@@ -17,6 +17,7 @@
       "error",
       "expression",
       { "allowArrowFunctions": true }
-    ]
+    ],
+    "no-unused-vars": "error"
   }
 }
