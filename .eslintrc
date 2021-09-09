@@ -11,5 +11,12 @@
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
-  ]
+  ],
+  "rules": {
+    "func-style": [
+      "error",
+      "expression",
+      { "allowArrowFunctions": true }
+    ]
+  }
 }
