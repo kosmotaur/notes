@@ -1,17 +1,9 @@
 import { Before, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import supertest from 'supertest';
+import { Note } from '../../Note';
 
 const isAddingNotesEnabled = () => process.env.ENABLE_ADDING_NOTES === 'true';
-
-type Owner = {
-  id: number;
-};
-type Note = {
-  title: string;
-  description: string;
-  owner: Owner['id'];
-};
 
 Before({ tags: '@addingNotes' }, () => {
   return isAddingNotesEnabled() ? null : 'skipped';
