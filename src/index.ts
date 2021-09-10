@@ -1,3 +1,3 @@
-export default (): void => {
-  console.log(42);
-};
+import express, { Express } from 'express';
+
+export default (): Express => express();
