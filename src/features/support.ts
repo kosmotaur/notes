@@ -2,8 +2,10 @@ import dotenv from 'dotenv';
 import { exec } from 'shelljs';
 import { After, Before } from '@cucumber/cucumber';
 import waitOn from 'wait-on';
+import path from 'path';
 
 dotenv.config();
+dotenv.config({ path: path.resolve(process.cwd(), '.env.test') });
 
 const startDb = () => {
   exec(
