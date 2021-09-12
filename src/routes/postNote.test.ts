@@ -14,24 +14,38 @@ const mockNote: Note = {
   updatedAt: new Date(),
   id: 13
 };
+const mockRequest = {
+  body: mockNote
+} as Request;
+const mockResponse = {
+  json: jest.fn()
+} as unknown as Response;
 
 describe('create notes route', () => {
   beforeEach(() => {
     route = createRoute(mockClient);
+    jest.resetAllMocks();
   });
   it('creates a new note', () => {
-    const mockRequest = {
-      body: mockNote
-    } as Request;
-
     route(mockRequest, {} as Response, mockNext);
+
     expect(mockClient.note.create).toHaveBeenCalledWith({
       data: mockNote
     });
   });
-  it('calls next handler', () => {
-    route({} as Request, {} as Response, mockNext);
+  it('sends the created note back', async () => {
+    mockClient.note.create.mockResolvedValue(mockNote);
 
-    expect(mockNext).toHaveBeenCalledWith();
+    await route(mockRequest, mockResponse, mockNext);
+
+    expect(mockResponse.json).toHaveBeenCalledWith(mockNote);
+  });
+  it('calls next handler with error', async () => {
+    const mockError = new Error('Something terrible has happened...');
+    mockClient.note.create.mockRejectedValue(mockError);
+
+    await route(mockRequest, mockResponse, mockNext);
+
+    expect(mockNext).toHaveBeenCalledWith(mockError);
   });
 });
