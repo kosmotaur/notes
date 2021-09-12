@@ -20,6 +20,7 @@ let appProcess: child.ChildProcess;
 
 const waitForDb = () => silentExec('docker exec test_db pg_isready');
 const migrateDb = () => silentExec('npm run migrate:test');
+const seedDb = () => silentExec('npm run db:seed');
 const startApp = () =>
   exec('npm start', {
     async: true,
@@ -43,6 +44,7 @@ Before({ timeout: 20000 }, async () => {
   startDb();
   waitForDb();
   migrateDb();
+  seedDb();
   appProcess = startApp();
   await waitOn({
     resources: ['http://localhost:3000'],

@@ -10,7 +10,8 @@
     "start": "ts-node scripts/start.ts",
     "test": "dotenv -e .env jest",
     "test:functional": "cucumber-js src/**/features/*.feature",
-    "migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema src/schema.prisma"
+    "migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema src/schema.prisma",
+    "db:seed": "prisma db seed"
   },
   "keywords": [],
   "author": "",
@@ -49,5 +50,8 @@
     "express": "^4.17.1",
     "morgan": "^1.10.0",
     "prisma": "^3.0.2"
+  },
+  "prisma": {
+    "seed": "ts-node scripts/seed.ts"
   }
 }
