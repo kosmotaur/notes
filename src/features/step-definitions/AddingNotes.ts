@@ -8,23 +8,27 @@ const isAddingNotesEnabled = () => process.env.ENABLE_ADDING_NOTES === 'true';
 Before({ tags: '@addingNotes' }, () => {
   return isAddingNotesEnabled() ? null : 'skipped';
 });
-const note: Note = {
+const note: Partial<Note> = {
   title: 'my great note',
-  description: 'Lorem ipsum dolor sit amet',
-  ownerId: 1,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  id: 1
+  description: 'Lorem ipsum dolor sit amet'
 };
 When('I add a note', async () =>
-  supertest(process.env.APP_URL).post('/notes').send(note)
+  supertest(process.env.APP_URL)
+    .post('/notes')
+    .send({
+      ...note,
+      owner: {
+        connect: {
+          id: 1
+        }
+      }
+    })
 );
 Then('my list of notes should contain one note', async () => {
   return supertest(process.env.APP_URL)
     .get('/notes')
-    .send()
     .expect(200)
     .then((res) => {
-      expect(res).to.deep.equal(note);
+      expect(res.body[0]).to.deep.include(note);
     });
 });
