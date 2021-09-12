@@ -1,5 +1,10 @@
 # Notes API
 
+## Prerequisites
+
+- Docker
+- Node.js v14
+
 ## Setup
 
 1. `npm i`
