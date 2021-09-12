@@ -1,13 +1,8 @@
-import { Before, Then, When } from '@cucumber/cucumber';
+import { Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import supertest from 'supertest';
 import { Note } from '@prisma/client';
 
-const isAddingNotesEnabled = () => process.env.ENABLE_ADDING_NOTES === 'true';
-
-Before({ tags: '@addingNotes' }, () => {
-  return isAddingNotesEnabled() ? null : 'skipped';
-});
 const note: Partial<Note> = {
   title: 'my great note',
   description: 'Lorem ipsum dolor sit amet'

@@ -10,11 +10,8 @@ const createApp = (client: Client): Express => {
 
   app.use(morgan('dev'));
   app.use(bodyParser.json());
-
-  if (process.env.ENABLE_ADDING_NOTES === 'true') {
-    app.post('/notes', createPostNote(client));
-    app.get('/notes', createGetNotes(client));
-  }
+  app.post('/notes', createPostNote(client));
+  app.get('/notes', createGetNotes(client));
 
   return app;
 };

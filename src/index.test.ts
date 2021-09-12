@@ -52,21 +52,18 @@ describe('application', () => {
     expect(morgan).toHaveBeenCalledWith('dev');
     expect(mockUse).toHaveBeenCalledWith(mockLoggingMiddleware);
   });
-  (process.env.ENABLE_ADDING_NOTES === 'true' ? describe : describe.skip)(
-    'notes routes',
-    () => {
-      it('mounts handler to create notes', () => {
-        createApp(mockClient);
+  describe('notes routes', () => {
+    it('mounts handler to create notes', () => {
+      createApp(mockClient);
 
-        expect(createPostNote).toHaveBeenCalledWith(mockClient);
-        expect(mockPost).toHaveBeenCalledWith('/notes', mockPostNote);
-      });
-      it('mounts handler to retrieve notes', () => {
-        createApp(mockClient);
+      expect(createPostNote).toHaveBeenCalledWith(mockClient);
+      expect(mockPost).toHaveBeenCalledWith('/notes', mockPostNote);
+    });
+    it('mounts handler to retrieve notes', () => {
+      createApp(mockClient);
 
-        expect(createGetNotes).toHaveBeenCalledWith(mockClient);
-        expect(mockGet).toHaveBeenCalledWith('/notes', mockGetNote);
-      });
-    }
-  );
+      expect(createGetNotes).toHaveBeenCalledWith(mockClient);
+      expect(mockGet).toHaveBeenCalledWith('/notes', mockGetNote);
+    });
+  });
 });
