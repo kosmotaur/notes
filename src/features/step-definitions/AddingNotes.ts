@@ -1,7 +1,7 @@
 import { Before, Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import supertest from 'supertest';
-import { Note } from '../../Note';
+import { Note } from '@prisma/client';
 
 const isAddingNotesEnabled = () => process.env.ENABLE_ADDING_NOTES === 'true';
 
@@ -11,7 +11,10 @@ Before({ tags: '@addingNotes' }, () => {
 const note: Note = {
   title: 'my great note',
   description: 'Lorem ipsum dolor sit amet',
-  owner: 42
+  ownerId: 1,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+  id: 1
 };
 When('I add a note', async () =>
   supertest(process.env.APP_URL).post('/notes').send(note)
