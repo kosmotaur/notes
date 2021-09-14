@@ -7,8 +7,10 @@ const note: Partial<Note> = {
   title: 'my great note',
   description: 'Lorem ipsum dolor sit amet'
 };
-When('I add a note', async () =>
-  supertest(process.env.APP_URL)
+let postTest: supertest.Test;
+
+When('I add a note', () => {
+  postTest = supertest(process.env.APP_URL)
     .post('/notes')
     .send({
       ...note,
@@ -17,7 +19,12 @@ When('I add a note', async () =>
           id: 1
         }
       }
-    })
+    });
+});
+Then('it should be created', async () =>
+  postTest.expect(201).then((res) => {
+    expect(res.body).to.deep.include(note);
+  })
 );
 Then('my list of notes should contain one note', async () => {
   return supertest(process.env.APP_URL)

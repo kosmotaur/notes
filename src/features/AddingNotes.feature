@@ -2,4 +2,5 @@ Feature: Adding notes
 
   Scenario: Adding a note
     When I add a note
-    Then my list of notes should contain one note
+    Then it should be created
+    And my list of notes should contain one note

@@ -9,6 +9,7 @@ const createPostNote =
         data: req.body
       });
 
+      res.status(201);
       res.json(result);
     } catch (e) {
       next(e);

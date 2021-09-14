@@ -18,7 +18,8 @@ const mockRequest = {
   body: mockNote
 } as Request;
 const mockResponse = {
-  json: jest.fn()
+  json: jest.fn(),
+  status: jest.fn()
 } as unknown as Response;
 
 describe('create notes route', () => {
@@ -38,6 +39,7 @@ describe('create notes route', () => {
 
     await route(mockRequest, mockResponse, mockNext);
 
+    expect(mockResponse.status).toHaveBeenCalledWith(201);
     expect(mockResponse.json).toHaveBeenCalledWith(mockNote);
   });
   it('calls next handler with error', async () => {
