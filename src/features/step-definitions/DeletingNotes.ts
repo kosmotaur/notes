@@ -1,13 +1,13 @@
 import { Before, Given, Then, When } from '@cucumber/cucumber';
-import { expect } from 'chai';
 import supertest from 'supertest';
 import { Note } from '@prisma/client';
+import { getFirstNoteId } from './common';
+import client from '../../client';
 
-const note: Partial<Note> = {
+const note: Pick<Note, 'title' | 'description'> = {
   title: 'my great note',
   description: 'Lorem ipsum dolor sit amet'
 };
-let postTest: Note;
 
 const isDeletingNotesEnabled = () => process.env.ENABLE_DELETING_NOTES;
 
@@ -15,31 +15,31 @@ Before({ tags: '@deletingNotes' }, () => {
   return isDeletingNotesEnabled() ? null : 'skipped';
 });
 
-Given(
-  'I have a note',
-  async () =>
-    (postTest = (
-      await supertest(process.env.APP_URL)
-        .post('/notes')
-        .send({
-          ...note,
-          owner: {
-            connect: {
-              id: 1
-            }
-          }
-        })
-    ).body) as Note
+Given('I have a note', () =>
+  client.note.create({
+    data: {
+      ...note,
+      owner: {
+        connect: {
+          id: 1
+        }
+      }
+    }
+  })
 );
 
 When('I delete it', async () =>
-  supertest(process.env.APP_URL).delete(`/notes/${postTest.id}`).expect(200)
+  supertest(process.env.APP_URL)
+    .delete(`/notes/${await getFirstNoteId()}`)
+    .expect(200)
 );
 
-Then('my list of notes should not include that note', async () =>
-  supertest(process.env.APP_URL)
-    .get('/notes')
-    .then((res) => {
-      expect(res.body).to.not.include(note);
+Then(
+  'my list of notes should not include that note',
+  async () =>
+    await client.note.findUnique({
+      where: {
+        id: await getFirstNoteId()
+      }
     })
 );

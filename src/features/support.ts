@@ -4,6 +4,7 @@ import { After, AfterAll, Before, BeforeAll } from '@cucumber/cucumber';
 import waitOn from 'wait-on';
 import path from 'path';
 import child from 'child_process';
+import client from '../client';
 
 dotenv.config();
 dotenv.config({ path: path.resolve(process.cwd(), '.env.test') });
@@ -20,8 +21,20 @@ const startDb = () => {
   );
 };
 const initDb = () => silentExec('npm run db:init');
-const createDb = () => {
+
+const waitForDb = () =>
+  waitOn(
+    {
+      resources: ['tcp:localhost:5433']
+    },
+    () => {
+      console.log('================DB READY!');
+    }
+  );
+
+const createDb = async () => {
   startDb();
+  await waitForDb();
   initDb();
 };
 const removeDb = () => {
@@ -41,8 +54,9 @@ const stopApp = () => {
   appProcess.kill('SIGINT');
 };
 
-BeforeAll(async () => {
+BeforeAll({ timeout: 20000 }, async () => {
   appProcess = startApp() as child.ChildProcess;
+  await createDb();
   await waitOn({
     resources: ['http://localhost:3000'],
     timeout: 10000,
@@ -50,15 +64,12 @@ BeforeAll(async () => {
   });
 });
 
-Before({ timeout: 20000 }, async () => {
-  createDb();
-});
-
 After(() => {
-  removeTestMigrations();
-  removeDb();
+  client.note.deleteMany();
 });
 
 AfterAll(() => {
+  removeTestMigrations();
+  removeDb();
   stopApp();
 });
