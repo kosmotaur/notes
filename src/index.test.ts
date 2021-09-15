@@ -71,17 +71,11 @@ describe('application', () => {
       expect(createGetNotes).toHaveBeenCalledWith(mockClient);
       expect(mockGet).toHaveBeenCalledWith('/notes', mockGetNote);
     });
-    (process.env.ENABLE_DELETING_NOTES === 'true' ? it : it.skip)(
-      'mounts handler to delete notes',
-      () => {
-        createApp(mockClient);
+    it('mounts handler to delete notes', () => {
+      createApp(mockClient);
 
-        expect(createDeleteNote).toHaveBeenCalledWith(mockClient);
-        expect(mockDelete).toHaveBeenCalledWith(
-          '/notes/:noteId',
-          mockDeleteNote
-        );
-      }
-    );
+      expect(createDeleteNote).toHaveBeenCalledWith(mockClient);
+      expect(mockDelete).toHaveBeenCalledWith('/notes/:noteId', mockDeleteNote);
+    });
   });
 });

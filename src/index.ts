@@ -13,9 +13,7 @@ const createApp = (client: Client): Express => {
   app.use(bodyParser.json());
   app.post('/notes', createPostNote(client));
   app.get('/notes', createGetNotes(client));
-  if (process.env.ENABLE_DELETING_NOTES === 'true') {
-    app.delete('/notes/:noteId', createDeleteNote(client));
-  }
+  app.delete('/notes/:noteId', createDeleteNote(client));
 
   return app;
 };

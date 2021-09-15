@@ -1,6 +1,5 @@
 Feature: Deleting notes
 
-  @deletingNotes
   Scenario: deleting a note
     Given I have a note
     When I delete it

@@ -14,9 +14,6 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    env:
-      ENABLE_DELETING_NOTES: false
-
     strategy:
       matrix:
         node-version: [14.16.1]

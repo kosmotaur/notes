@@ -1,4 +1,4 @@
-import { Before, Given, Then, When } from '@cucumber/cucumber';
+import { Given, Then, When } from '@cucumber/cucumber';
 import supertest from 'supertest';
 import { Note } from '@prisma/client';
 import { getFirstNoteId } from './common';
@@ -8,12 +8,6 @@ const note: Pick<Note, 'title' | 'description'> = {
   title: 'my great note',
   description: 'Lorem ipsum dolor sit amet'
 };
-
-const isDeletingNotesEnabled = () => process.env.ENABLE_DELETING_NOTES;
-
-Before({ tags: '@deletingNotes' }, () => {
-  return isDeletingNotesEnabled() ? null : 'skipped';
-});
 
 Given('I have a note', () =>
   client.note.create({
