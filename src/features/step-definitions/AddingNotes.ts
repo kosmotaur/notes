@@ -26,7 +26,7 @@ Then('it should be created', async () =>
     expect(res.body).to.deep.include(note);
   })
 );
-Then('my list of notes should contain one note', async () => {
+Then('my list of notes should contain that note', async () => {
   return supertest(process.env.APP_URL)
     .get('/notes')
     .expect(200)
