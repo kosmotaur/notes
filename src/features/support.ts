@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { exec, ExecOptions } from 'shelljs';
-import { After, AfterAll, Before, BeforeAll } from '@cucumber/cucumber';
+import { After, AfterAll, BeforeAll } from '@cucumber/cucumber';
 import waitOn from 'wait-on';
 import path from 'path';
 import child from 'child_process';
@@ -23,14 +23,9 @@ const startDb = () => {
 const initDb = () => silentExec('npm run db:init');
 
 const waitForDb = () =>
-  waitOn(
-    {
-      resources: ['tcp:localhost:5433']
-    },
-    () => {
-      console.log('================DB READY!');
-    }
-  );
+  waitOn({
+    resources: ['tcp:localhost:5433']
+  });
 
 const createDb = async () => {
   startDb();
@@ -55,8 +50,8 @@ const stopApp = () => {
 };
 
 BeforeAll({ timeout: 20000 }, async () => {
-  appProcess = startApp() as child.ChildProcess;
   await createDb();
+  appProcess = startApp() as child.ChildProcess;
   await waitOn({
     resources: ['http://localhost:3000'],
     timeout: 10000,
