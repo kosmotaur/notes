@@ -2,6 +2,7 @@ import { Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import supertest from 'supertest';
 import { Note } from '@prisma/client';
+import client from '../../client';
 
 const note: Partial<Note> = {
   title: 'my great note',
@@ -27,10 +28,7 @@ Then('it should be created', async () =>
   })
 );
 Then('my list of notes should contain that note', async () => {
-  return supertest(process.env.APP_URL)
-    .get('/notes')
-    .expect(200)
-    .then((res) => {
-      expect(res.body[0]).to.deep.include(note);
-    });
+  const storedNote = await client.note.findFirst();
+
+  expect(storedNote).to.deep.include(note);
 });
