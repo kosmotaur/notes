@@ -36,9 +36,6 @@ const removeDb = () => {
   silentExec('docker stop test_db');
   silentExec('docker rm test_db');
 };
-const removeTestMigrations = () => {
-  silentExec('rm -rf ./src/migrations');
-};
 
 let appProcess: child.ChildProcess;
 const startApp = () =>
@@ -64,7 +61,6 @@ After(() => {
 });
 
 AfterAll(() => {
-  removeTestMigrations();
   removeDb();
   stopApp();
 });
