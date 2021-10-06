@@ -1,13 +1,10 @@
 import { Given, Then, When } from '@cucumber/cucumber';
 import supertest from 'supertest';
-import { Note } from '@prisma/client';
-import { getFirstNoteId } from './common';
+import { createNote, getFirstNoteId } from './common';
 import client from '../../client';
+import { BaseNote } from '../../Note';
 
-const note: Pick<Note, 'title' | 'description'> = {
-  title: 'my great note',
-  description: 'Lorem ipsum dolor sit amet'
-};
+const note: BaseNote = createNote();
 
 Given('I have a note', () =>
   client.note.create({

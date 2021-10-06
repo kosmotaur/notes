@@ -1,13 +1,11 @@
 import { Then, When } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import supertest from 'supertest';
-import { Note } from '@prisma/client';
 import client from '../../client';
+import { BaseNote } from '../../Note';
+import { createNote } from './common';
 
-const note: Partial<Note> = {
-  title: 'my great note',
-  description: 'Lorem ipsum dolor sit amet'
-};
+const note: BaseNote = createNote();
 let postTest: supertest.Test;
 
 When('I add a note', () => {
