@@ -12,3 +12,6 @@ export const createNote: () => BaseNote = () => ({
     .n(chance.sentence, chance.natural({ min: 1, max: 10 }))
     .join('')
 });
+
+export const createNotes: (n: number) => BaseNote[] = (n) =>
+  chance.n(createNote, n);
