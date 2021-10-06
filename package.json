@@ -13,7 +13,9 @@
     "db:migrate:test": "dotenv -e .env.test -- prisma migrate dev --name init --schema src/schema.prisma",
     "db:seed": "prisma db seed",
     "db:push:test": "dotenv -e .env.test -- prisma db push --schema src/schema.prisma",
-    "db:init": "run-s db:push:test db:seed"
+    "db:init": "run-s db:push:test db:seed",
+    "db:generate-client": "prisma generate --schema src/schema.prisma",
+    "postinstall": "run-s db:generate-client"
   },
   "keywords": [],
   "author": "",
