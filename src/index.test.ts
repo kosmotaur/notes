@@ -7,6 +7,7 @@ import createPostNote from './routes/postNote';
 import createGetNotes from './routes/getNotes';
 import createDeleteNote from './routes/deleteNote';
 import mockClient from './client.mock';
+import createPutNote from './routes/putNote';
 
 jest.mock('morgan');
 jest.mock('express');
@@ -16,17 +17,20 @@ jest.mock('body-parser', () => ({
 jest.mock('./routes/postNote');
 jest.mock('./routes/getNotes');
 jest.mock('./routes/deleteNote');
+jest.mock('./routes/putNote');
 
 const mockApp = jest.fn() as unknown as Express;
 const mockUse = jest.fn();
 const mockPost = jest.fn();
 const mockGet = jest.fn();
 const mockDelete = jest.fn();
+const mockPut = jest.fn();
 const mockJsonBodyParser = jest.fn();
 const mockLoggingMiddleware = jest.fn();
 const mockPostNote = jest.fn();
 const mockGetNote = jest.fn();
 const mockDeleteNote = jest.fn();
+const mockPutNote = jest.fn();
 
 describe('application', () => {
   beforeEach(() => {
@@ -35,12 +39,14 @@ describe('application', () => {
     mockApp.post = mockPost;
     mockApp.get = mockGet;
     mockApp.delete = mockDelete;
+    mockApp.put = mockPut;
     mocked(express).mockReturnValue(mockApp);
     mocked(bodyParser.json).mockReturnValue(mockJsonBodyParser);
     mocked(morgan).mockReturnValue(mockLoggingMiddleware);
     mocked(createPostNote).mockReturnValue(mockPostNote);
     mocked(createGetNotes).mockReturnValue(mockGetNote);
     mocked(createDeleteNote).mockReturnValue(mockDeleteNote);
+    mocked(createPutNote).mockReturnValue(mockPutNote);
   });
   it('creates an application', () => {
     const app = createApp(mockClient);
@@ -76,6 +82,12 @@ describe('application', () => {
 
       expect(createDeleteNote).toHaveBeenCalledWith(mockClient);
       expect(mockDelete).toHaveBeenCalledWith('/notes/:noteId', mockDeleteNote);
+    });
+    it('mounts handler to update notes', () => {
+      createApp(mockClient);
+
+      expect(createPutNote).toHaveBeenCalledWith(mockClient);
+      expect(mockPut).toHaveBeenCalledWith('/notes/:noteId', mockPutNote);
     });
   });
 });

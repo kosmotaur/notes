@@ -14,3 +14,8 @@ Feature: Managing notes
     Given I have a note
     When I delete it
     Then my list of notes should not include that note
+
+  Scenario: updating a note
+    Given I have a note
+    When I update it
+    Then my note should be updated
