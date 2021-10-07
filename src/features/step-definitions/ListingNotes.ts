@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import client from '../../client';
 import { createNotes } from './common';
 import supertest from 'supertest';
+import { Note } from '@prisma/client';
 
 const notes = createNotes(5);
 let getTest: supertest.Test;
@@ -22,6 +23,8 @@ When('I request them', () => {
 
 Then('my list of notes contains them', () =>
   getTest.expect(200).then((res) => {
-    expect(res.body).to.deep.include(notes);
+    (res.body as Note[]).forEach((note, i) =>
+      expect(note).to.deep.include(notes[i])
+    );
   })
 );
