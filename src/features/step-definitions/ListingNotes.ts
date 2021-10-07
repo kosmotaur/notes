@@ -7,14 +7,14 @@ import supertest from 'supertest';
 const notes = createNotes(5);
 let getTest: supertest.Test;
 
-Given('I have some notes', () => {
+Given('I have some notes', () =>
   client.note.createMany({
     data: notes.map((note) => ({
       ...note,
       ownerId: 1
     }))
-  });
-});
+  })
+);
 
 When('I request them', () => {
   getTest = supertest(process.env.APP_URL).get('/notes');
