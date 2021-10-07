@@ -56,9 +56,7 @@ BeforeAll({ timeout: 20000 }, async () => {
   });
 });
 
-After(() => {
-  client.note.deleteMany();
-});
+After(() => client.note.deleteMany());
 
 AfterAll(() => {
   removeDb();
